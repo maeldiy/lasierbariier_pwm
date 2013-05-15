@@ -1,5 +1,7 @@
 // laser barrier pwm
 // pwm generation for IR diode to make a IR or laser barrier
+// based on msp 430 launchpad for pwm generation and reception for development only, see msp 430 directory
+// based on stellaris launchpad for pwm generation, signal reception and CANBUS transmission, see stellarpad directory
 /*
 - * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 - * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -8,7 +10,7 @@
 - * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 - * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 - * THE SOFTWARE.
-+ * http://www.lauridmeyer.com
+
   * 
 - * 
 - *             DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
@@ -25,6 +27,8 @@
 -  0. You just DO WHAT THE FUCK YOU WANT TO.
 -
   */
+MSP 430 launchpad
+
 Set p2_1, P2_2,  as output for PWM
 set green and red led as output for debug and alignment
 set P1_3, P1_4 as analog input for alignment purpose
