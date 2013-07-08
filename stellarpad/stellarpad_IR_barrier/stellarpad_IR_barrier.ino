@@ -28,42 +28,57 @@
 int debug = 0;  // 1 if debug enable
 int led_state = HIGH;  // the led will be on once at startup
 int val_alignment=0;  // the "power meter" input
-int beam1 = 0;  // beam 1 state
-int beam2  = 0;  // beam 2 state
+int beam1_1 = 0;  // beam 1_1 state
+int beam1_2  = 0;  // beam 1_2 state
+int beam2_1 = 0;  // beam 2_1 state
+int beam2_2  = 0;  // beam 2_2 state
 long previousMillis = 0;        // will store last time LED was updated
 long interval = 1000;           // interval at which to blink (milliseconds), the value will move with the power on readind
 unsigned long currentMillis;
+int val_alignment1_1, val_alignment1_2, val_alignment2_2,val_alignment2_1;
 
 void setup() {
   // 2 PWM output channels
- pinMode(P2_1, OUTPUT);    
- pinMode(P2_2, OUTPUT); 
- // 2 input channels for beam reading
- pinMode(P2_4, INPUT); 
- pinMode(P2_5, INPUT);   
-//  CCTL1 = OUTMOD_7; to be removed or not ?
- /* Port 1 Resistor Enable Register */
- //green and red led used for alignment
- pinMode(GREEN_LED, OUTPUT);  
- pinMode(RED_LED, OUTPUT);  
-// 2 analog input for beam alignment
- pinMode(P1_3, INPUT);    
- pinMode(P1_4, INPUT); 
+ pinMode(PA_2, OUTPUT);   // PWM output :  pin 1
+ pinMode(PA_7, OUTPUT);   // PWM output :  pin 10 
+
+ // 4 input channels for beam reading or crossing detection
+ pinMode(PA_3, INPUT);   // beam 1_1 digital input : pin 12 
+ pinMode(PA_4, INPUT);   // beam 1_2 digital input : pin 13 
+ pinMode(PA_5, INPUT);   // beam 2_1 digital input : pin 8
+ pinMode(PA_6, INPUT);   // beam 2_2 digital input : pin 9 
  
- digitalWrite(GREEN_LED, led_state); // let light the green led 
+ // Reading for push button, for beam alignmenet switching
+ pinMode(PF_4, INPUT);   // PUSH1 digital input : pin 31
+ pinMode(PF_0, INPUT);   // PUSH2 digital input : pin 17
+ 
+ //green and blue led used for alignment, red for beam crossing
+ pinMode(GREEN_LED, OUTPUT);  
+ pinMode(BLUE_LED, OUTPUT);  
+ pinMode(RED_LED, OUTPUT);  
+// 4 analog input for beam alignment
+ pinMode(PE_2, INPUT);   // Beam 1_2 analog input :  pin 28
+ pinMode(PE_1, INPUT);   // Beam 1_2 analog input :  pin 27
+ pinMode(PD_3, INPUT);   // Beam 2_1 analog input :  pin 26
+ pinMode(PD_2, INPUT);   // Beam 2_2 analog input :  pin 25
+ 
+// CANBUS init missing
  
  }
 
 // initialisation des variables a faire ; code du type noteaps++ a  rajouter
 void loop() {
-   
-   analogFrequency(38000);   //set frequence, 38 khz in case of use of TSOP
-   analogWrite(P2_1,128);   // 128 for 50% duty cycle
-   analogWrite(P2_2,128); 
+  // analogFrequency(20000);
+   analogFrequency(38000);   //set frequence, 38 khz in case of use of TSOP !! !!not working on stellarpad ???!!
+   analogWrite(PA_2,128);   // 128 for 50% duty cycle
+   analogWrite(PA_7,128); 
    // alignmnent : the aim of this piece of code is to provide alignment information, 
    // the more aligned are the photodiode and the Ir diode, the more blinky will be green diode
    
-   val_alignment = analogRead(P1_3);    // read the value from the sensor
+   val_alignment1_1 = analogRead(PA_3);    // read the value from the sensor on beam 1_1
+   val_alignment1_2 = analogRead(PA_4);    // read the value from the sensor on beam 1_2
+   val_alignment2_1 = analogRead(PA_5);    // read the value from the sensor on beam 2_1
+   val_alignment2_2 = analogRead(PA_6);    // read the value from the sensor on beam 2_2
    
   // check to see if it's time to blink the LED; that is, if the 
   // difference between the current time and last time you blinked 
@@ -87,8 +102,10 @@ void loop() {
          digitalWrite(GREEN_LED, led_state); 
         
     // beam info    
-    beam1 = digitalRead(P2_4);    
-    digitalWrite(RED_LED, beam1);
+    beam2_1 = digitalRead(PA_3);    
+    beam1_2 = digitalRead(PA_4);    
+    beam2_1 = digitalRead(PA_5);
+    beam2_2 = digitalRead(PA_6);    
   }
 }
    
@@ -97,3 +114,4 @@ void loop() {
    
    
    
+
